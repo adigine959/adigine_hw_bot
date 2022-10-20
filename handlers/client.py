@@ -1,13 +1,10 @@
 from aiogram import types, Dispatcher
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from config import  bot
-
-
-
+from config import bot
+from database.bot_db import sql_command_random
 
 async def start_command(message: types.Message):
     await message.answer(f'Привет {message.from_user.full_name}')
-
 
 
 async def mem_command(message: types.Message):
@@ -40,11 +37,16 @@ async def quiz_1(message: types.Message):
         reply_markup=markup
     )
 
+
 async def pin(message: types.Message):
     if message.reply_to_message:
         await bot.pin_chat_message(message.chat.id, message.reply_to_message.message_id)
     else:
         await bot.send_message(message.chat.id, "это должно быть ответом на сообщение ")
+
+
+async def get_random_mentor(message: types.Message):
+    await sql_command_random(message)
 
 def register_client_handlers(dp: Dispatcher):
     dp.register_message_handler(start_command, commands=['start'])

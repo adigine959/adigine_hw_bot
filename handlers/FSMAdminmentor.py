@@ -4,7 +4,7 @@ from keyboard.client_cb import cancel_markup
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
-
+from database.bot_db import sql_command_insert
 
 class FSMAdmin(StatesGroup):
     id = State()
@@ -70,6 +70,7 @@ async def load_group(message: types.Message, state: FSMContext):
         data['group'] = message.text
         await message.answer(f"ID: {data['ID']} Имя: {data['name']}\n"
                              f"Направление: {data['dir']} Возраст: {data['age']} Группа: {data['group']}")
+    await sql_command_insert(state)
     await state.finish()
     await message.answer('Регистрация закончена!')
 
