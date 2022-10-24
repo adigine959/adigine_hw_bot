@@ -11,7 +11,7 @@ async def get_chat_id(message: types.Message):
 
 
 async def go_to_lesson():
-    await bot.send_message(chat_id=chat_id, 'Сегодня урок в гике!')
+    await bot.send_message(chat_id=chat_id, text='Сегодня урок в гике!')
 
 
 async def scheduler():
