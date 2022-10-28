@@ -2,6 +2,7 @@ from aiogram import types, Dispatcher
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from config import bot
 from database.bot_db import sql_command_random
+from handlers.parse import parser
 
 async def start_command(message: types.Message):
     await message.answer(f'Привет {message.from_user.full_name}')
@@ -48,8 +49,21 @@ async def pin(message: types.Message):
 async def get_random_mentor(message: types.Message):
     await sql_command_random(message)
 
+
+async def parse_news(message: types.Message):
+    items = parser()
+    for item in items:
+        await bot.send_message(message.chat.id,
+            text=f"{item['link']}\n\n"
+                 f"{item['title']}\n\n"
+                 f"{item['time']}, "
+                 f"#Y{item['day']}, "
+                 f"#{item['year']}\n"
+        )
+
 def register_client_handlers(dp: Dispatcher):
     dp.register_message_handler(start_command, commands=['start'])
     dp.register_message_handler(mem_command, commands=['meme'])
     dp.register_message_handler(quiz_1, commands=['quiz'])
     dp.register_message_handler(pin, commands=['pin'], commands_prefix='!')
+    dp.register_message_handler(parse_news, commands=['news'])
